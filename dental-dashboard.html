@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Dental Clinic Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <style>
+    body {
+      background: #f4f8fb;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+    .dashboard-container {
+      max-width: 1000px;
+      margin: 30px auto;
+      padding: 20px;
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 2px 16px #cbd0d6;
+    }
+    .dashboard-title {
+      font-size: 2em;
+      font-weight: bold;
+      margin-bottom: 10px;
+      color: #2370b7;
+    }
+    .overview {
+      display: flex;
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+    .card {
+      flex: 1;
+      background: #f7fafc;
+      border-radius: 8px;
+      padding: 20px;
+      text-align: center;
+      box-shadow: 0 1px 4px #e7eaf0;
+    }
+    .card h3 {
+      margin: 0 0 8px 0;
+      color: #5c5e62;
+    }
+    .card .count {
+      font-size: 2em;
+      color: #2370b7;
+    }
+    .appointments-section {
+      margin-bottom: 30px;
+    }
+    .appointments-section h2 {
+      font-size: 1.2em;
+      color: #2370b7;
+      margin-bottom: 10px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: #fcfdfe;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    th, td {
+      padding: 10px;
+      text-align: left;
+      border-bottom: 1px solid #e7eaf0;
+    }
+    th {
+      background: #eaf3fa;
+      color: #2370b7;
+    }
+    .actions-section {
+      display: flex;
+      gap: 20px;
+      margin-bottom: 10px;
+    }
+    .action-btn {
+      flex: 1;
+      padding: 12px;
+      background: #2370b7;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      font-size: 1em;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .action-btn:hover {
+      background: #16558e;
+    }
+    @media (max-width: 700px) {
+      .overview, .actions-section {
+        flex-direction: column;
+        gap: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="dashboard-container">
+    <div class="dashboard-title">Dental Clinic Dashboard</div>
+
+    <div class="overview">
+      <div class="card">
+        <h3>Total Patients</h3>
+        <div class="count" id="patientsCount">0</div>
+      </div>
+      <div class="card">
+        <h3>Appointments Today</h3>
+        <div class="count" id="appointmentsCount">0</div>
+      </div>
+      <div class="card">
+        <h3>Total Dentists</h3>
+        <div class="count" id="dentistsCount">0</div>
+      </div>
+    </div>
+
+    <div class="actions-section">
+      <button class="action-btn" onclick="addPatient()">+ Add Patient</button>
+      <button class="action-btn" onclick="addAppointment()">+ Add Appointment</button>
+    </div>
+
+    <div class="appointments-section">
+      <h2>Today's Appointments</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Time</th>
+            <th>Patient</th>
+            <th>Dentist</th>
+            <th>Treatment</th>
+          </tr>
+        </thead>
+        <tbody id="appointmentsTableBody">
+          <!-- Appointments will appear here -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <script>
+    // Sample data
+    const patients = [
+      { id: 1, name: "Jane Doe" },
+      { id: 2, name: "John Smith" },
+      { id: 3, name: "Mary Lee" },
+    ];
+    const dentists = [
+      { id: 1, name: "Dr. Alice" },
+      { id: 2, name: "Dr. Bob" },
+    ];
+    const appointments = [
+      { time: "09:00", patient: "Jane Doe", dentist: "Dr. Alice", treatment: "Cleaning" },
+      { time: "10:30", patient: "John Smith", dentist: "Dr. Bob", treatment: "Filling" },
+      { time: "14:00", patient: "Mary Lee", dentist: "Dr. Alice", treatment: "Checkup" },
+    ];
+
+    function renderOverview() {
+      document.getElementById('patientsCount').textContent = patients.length;
+      document.getElementById('appointmentsCount').textContent = appointments.length;
+      document.getElementById('dentistsCount').textContent = dentists.length;
+    }
+
+    function renderAppointments() {
+      const tbody = document.getElementById('appointmentsTableBody');
+      tbody.innerHTML = '';
+      for (const appt of appointments) {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${appt.time}</td>
+          <td>${appt.patient}</td>
+          <td>${appt.dentist}</td>
+          <td>${appt.treatment}</td>
+        `;
+        tbody.appendChild(row);
+      }
+    }
+
+    function addPatient() {
+      const name = prompt("Enter new patient's name:");
+      if (name && name.trim()) {
+        patients.push({ id: patients.length + 1, name: name.trim() });
+        renderOverview();
+        alert(`Patient "${name.trim()}" added!`);
+      }
+    }
+
+    function addAppointment() {
+      const patient = prompt("Enter patient name:");
+      const dentist = prompt("Enter dentist name:");
+      const time = prompt("Enter time (e.g. 11:00):");
+      const treatment = prompt("Enter treatment:");
+      if (patient && dentist && time && treatment) {
+        appointments.push({
+          time,
+          patient,
+          dentist,
+          treatment
+        });
+        renderOverview();
+        renderAppointments();
+        alert("Appointment added!");
+      }
+    }
+
+    // Initial render
+    renderOverview();
+    renderAppointments();
+  </script>
+</body>
+</html>
